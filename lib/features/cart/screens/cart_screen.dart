@@ -10,7 +10,8 @@ import 'package:tastehub/core/widgets/custom_button.dart';
 import '../../../core/providers/cart_provider.dart';
 
 class CartScreen extends ConsumerWidget {
-  const CartScreen({super.key});
+  final double pad;
+  const CartScreen({super.key, required this.pad,});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -118,7 +119,7 @@ class CartScreen extends ConsumerWidget {
                           // Item total
                           Text(
                             "\$${item.totalPrice}",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
                       ),
@@ -132,7 +133,12 @@ class CartScreen extends ConsumerWidget {
               ? null
               : SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 16,
+                    bottom: pad,
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

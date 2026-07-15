@@ -209,8 +209,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       child: customButton(
                         context: context,
                         title: "see more",
-                        bgColor: AppColors.primMain,
-                        titleColor: AppColors.primWhite,
+                        bgColor: AppColors.primMain.withValues(alpha: 0.6),
+                        titleColor: AppColors.primDark,
                         onTap: () {},
                       ),
                     );
@@ -255,6 +255,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: GestureDetector(
                               onTap: () {
+                                removeDropdown();
                                 GoRouter.of(context).push(
                                   "/${RouterPaths.foodDetails}",
                                   extra: food,
@@ -290,8 +291,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       child: customButton(
                         context: context,
                         title: "see more",
-                        bgColor: AppColors.primMain,
-                        titleColor: AppColors.primWhite,
+                        bgColor: AppColors.primMain.withValues(alpha: 0.6),
+                        titleColor: AppColors.primDark,
                         onTap: () {},
                       ),
                     );
@@ -312,6 +313,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     return Expanded(
       child: TextField(
         controller: _searchController,
+        autofocus: false,
         onChanged: (value) {
           ref.read(searchProvider.notifier).updateSearch(value);
           if (value.isNotEmpty) {
@@ -335,9 +337,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     icon: const Icon(Icons.close),
 
                     onPressed: () {
-                      FocusScope.of(context).unfocus();
                       removeDropdown();
-                      _searchController.clear();
                       ref.read(searchProvider.notifier).clearSearch();
                     },
                   )
@@ -376,9 +376,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     title: Text(food.name),
                     subtitle: Text(food.category),
                     onTap: () {
-                      FocusScope.of(context).unfocus();
                       removeDropdown();
-                      _searchController.clear();
                       ref.read(searchProvider.notifier).clearSearch();
                       GoRouter.of(
                         context,
@@ -396,6 +394,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   }
 
   void removeDropdown() {
+    FocusScope.of(context).unfocus();
+    _searchController.clear();
     _overlayEntry?.remove();
     _overlayEntry = null;
   }

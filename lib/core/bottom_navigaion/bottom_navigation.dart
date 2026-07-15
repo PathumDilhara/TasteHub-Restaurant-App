@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tastehub/core/utils/colors.dart';
+import 'package:tastehub/features/cart/screens/cart_screen.dart';
 
 import '../../features/explore/screens/explore_screen.dart';
+import '../../features/profile/profile_screen.dart';
 import '../widgets/svg_icon.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
@@ -19,7 +21,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   void initState() {
     super.initState();
-    screens = [ExploreScreen(), ExploreScreen(), ExploreScreen()];
+    screens = [ExploreScreen(), CartScreen(pad: 100.0,), ProfileScreen()];
   }
 
   @override

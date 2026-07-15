@@ -233,7 +233,7 @@ class _FoodDetailsScreenState extends ConsumerState<FoodDetailsScreen> {
           width: 60,
           child: IconButton(
             onPressed: () {
-              GoRouter.of(context).push("/${RouterPaths.cart}");
+              GoRouter.of(context).push("/${RouterPaths.cart}", extra: 16.0);
             },
             icon: Icon(Icons.shopping_cart, size: 30),
           ),

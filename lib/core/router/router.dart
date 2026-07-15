@@ -11,7 +11,7 @@ import 'package:tastehub/features/splash/screens/splash_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
-    initialLocation: "/${RouterPaths.login}", // splash
+    initialLocation: "/${RouterPaths.splash}", // splash
     routes: [
       // Explore screen
       GoRoute(
@@ -43,7 +43,10 @@ class AppRouter {
       // Cart screen
       GoRoute(
         path: "/${RouterPaths.cart}",
-        builder: (context, state) => CartScreen(),
+        builder: (context, state) {
+          final pad = state.extra as double;
+          return CartScreen(pad: pad,);
+        },
       ),
 
       // Order success screen

@@ -263,6 +263,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 return "Password can not be empty";
               }
 
+              if (value.length < 8 ) {
+                return "Password must be contain at least 8 characters";
+              }
+
               return null;
             },
           ),
