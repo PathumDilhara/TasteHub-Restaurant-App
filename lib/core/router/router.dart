@@ -11,7 +11,7 @@ import 'package:tastehub/features/splash/screens/splash_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
-    initialLocation: "/${RouterPaths.splash}",
+    initialLocation: "/${RouterPaths.login}", // splash
     routes: [
       // Explore screen
       GoRoute(

@@ -44,15 +44,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primMain,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // top bar
-          Expanded(flex: 2, child: _buildAppInfoSection()),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // top bar
+              Expanded(flex: 2, child: _buildAppInfoSection()),
 
-          // login card
-          Expanded(flex: 4, child: _buildLoginCard()),
-        ],
+              // login card
+              Expanded(flex: 4, child: _buildLoginCard()),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -77,33 +82,24 @@ class _LoginScreenState extends State<LoginScreen> {
           Text(
             "Delicious food,\ndelivered with love",
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: AppColors.primWhite,
               fontWeight: FontWeight.w400,
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10),
 
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Text(
               "Order | Eat | Enjoy",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(
-                color: AppColors.primWhite,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium!.copyWith(color: AppColors.primWhite),
             ),
           ),
         ],
@@ -111,143 +107,124 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginCard() {
-    return Stack(
-      children: [
-        Positioned(
-          left: 8,
-          right: 8,
-          top: 0,
-          child: Container(
-            width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(kCardBR),
-              color: AppColors.primWhite.withValues(alpha: 0.3),
-            ),
-          ),
-        ),
+  // Positioned(
+  //   left: 8,
+  //   right: 8,
+  //   top: 0,
+  //   child: Container(
+  //     width: double.infinity,
+  //     height: 100,
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(kCardBR),
+  //       color: AppColors.primWhite.withValues(alpha: 0.3),
+  //     ),
+  //   ),
+  // ),
 
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 20,
-          bottom: 0,
-          child: Container(
-            padding: EdgeInsets.only(
-              left: kMainPadding,
-              right: kMainPadding,
-              top: kMainPadding * 2,
-              bottom: kMainPadding,
-            ),
+  Widget _buildLoginCard() {
+    return Container(
+      padding: EdgeInsets.only(
+        left: kMainPadding,
+        right: kMainPadding,
+        top: kMainPadding * 2,
+        bottom: kMainPadding,
+      ),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.primWhite,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primWhite.withValues(alpha: 0.3),
+            offset: Offset(0, -20),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            "Welcome Back",
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          SizedBox(height: 5),
+          Text(
+            "Enter you detail below",
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge!.copyWith(color: AppColors.primLightGrey),
+          ),
+          SizedBox(height: 50),
+
+          _buildLoginForm(),
+          SizedBox(height: 20),
+
+          customButton(
+            context: context,
+            title: "Log In",
+            bgColor: AppColors.primMain,
+            titleColor: AppColors.primWhite,
+            height: 50,
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.primWhite,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+            onTap: () {
+              _onLogin();
+            },
+          ),
+          SizedBox(height: 10),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Don't have an account ?",
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge!.copyWith(color: AppColors.primDark),
               ),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: AppColors.primWhite.withValues(alpha: 0.3),
-              //     offset: Offset(0, -10),
-              //     blurRadius: 1,
-              //     spreadRadius: 10,
-              //     blurStyle: BlurStyle.inner
-              //   ),
-              // ],
-            ),
-            child: Column(
-              children: [
-                Text(
-                  "Welcome Back",
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                SizedBox(height: 5),
-                Text(
-                  "Enter you detail below",
+              SizedBox(width: 10),
+
+              TextButton(
+                child: Text(
+                  "Sign in",
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    decoration: TextDecoration.underline,
+                    color: AppColors.primMain,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {},
+              ),
+            ],
+          ),
+          SizedBox(height: 30),
+          Row(
+            children: [
+              Expanded(child: Divider(color: AppColors.primLightGrey)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(
+                  "Or sign in with",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: AppColors.primLightGrey,
                   ),
                 ),
-                SizedBox(height: 50),
-
-                _buildLoginForm(),
-                SizedBox(height: 20),
-
-                customButton(
-                  context: context,
-                  title: "Log In",
-                  bgColor: AppColors.primMain,
-                  titleColor: AppColors.primWhite,
-                  height: 50,
-                  width: double.infinity,
-                  onTap: () {
-                    _onLogin();
-                  },
-                ),
-                SizedBox(height: 10),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account ?",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: AppColors.primDark,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-
-                    TextButton(
-                      child: Text(
-                        "Sign in",
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          decoration: TextDecoration.underline,
-                          color: AppColors.primMain,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30),
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: AppColors.primLightGrey)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        "Or sign in with",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: AppColors.primLightGrey,
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Divider(color: AppColors.primLightGrey)),
-                  ],
-                ),
-                SizedBox(height: 30),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildOtherSignInOptionCard(
-                      "assets/icons/google.png",
-                      "Google",
-                    ),
-                    _buildOtherSignInOptionCard(
-                      "assets/icons/fb.png",
-                      "Facebook",
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+              Expanded(child: Divider(color: AppColors.primLightGrey)),
+            ],
           ),
-        ),
-      ],
+          SizedBox(height: 30),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildOtherSignInOptionCard("assets/icons/google.png", "Google"),
+              _buildOtherSignInOptionCard("assets/icons/fb.png", "Facebook"),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
