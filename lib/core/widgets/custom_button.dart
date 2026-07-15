@@ -8,7 +8,7 @@ Widget customButton({
   required Color titleColor,
   double borderRadius = kButtonBR,
   double width = 100,
-  double height = 40,
+  double height = 50,
   required VoidCallback onTap,
 }) {
   return Material(

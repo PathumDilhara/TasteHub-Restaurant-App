@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       emailController.clear();
       passwordController.clear();
 
-      GoRouter.of(context).push("/${RouterPaths.explore}");
+      GoRouter.of(context).pushReplacement("/${RouterPaths.bottomNavigation}");
       // print("Email : $email , Password : $password");
     }
   }

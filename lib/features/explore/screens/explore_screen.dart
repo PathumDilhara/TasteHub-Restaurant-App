@@ -9,6 +9,7 @@ import 'package:tastehub/core/utils/constants.dart';
 import 'package:tastehub/features/explore/models/category_card_model.dart';
 import 'package:tastehub/features/explore/models/food_model.dart';
 
+import '../../../core/providers/food_provider.dart';
 import '../../../core/widgets/custom_button.dart';
 
 class ExploreScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,9 @@ class ExploreScreen extends ConsumerStatefulWidget {
 }
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  OverlayEntry? _overlayEntry;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -65,7 +69,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     return Row(
       children: [
         Image.asset("assets/images/tastehub_o.png", width: 100),
-        Spacer(),
+        // Spacer(),
+        SizedBox(width: 10),
+
+        _buildSearchBar(),
+        SizedBox(width: 10),
 
         // notifications
         Container(
@@ -201,7 +209,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       child: customButton(
                         context: context,
                         title: "see more",
-                        bgColor: Colors.blue,
+                        bgColor: AppColors.primMain,
                         titleColor: AppColors.primWhite,
                         onTap: () {},
                       ),
@@ -247,10 +255,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: GestureDetector(
                               onTap: () {
-                                GoRouter.of(
-                                  context,
-                                ).push("/${RouterPaths.foodDetails}",
-                                extra: food);
+                                GoRouter.of(context).push(
+                                  "/${RouterPaths.foodDetails}",
+                                  extra: food,
+                                );
                               },
                               child: CachedNetworkImage(
                                 imageUrl: food.imageUrl,
@@ -282,7 +290,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       child: customButton(
                         context: context,
                         title: "see more",
-                        bgColor: Colors.blue,
+                        bgColor: AppColors.primMain,
                         titleColor: AppColors.primWhite,
                         onTap: () {},
                       ),
@@ -293,5 +301,102 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
+  }
+
+  Widget _buildSearchBar() {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kTextInputBR),
+      borderSide: BorderSide(color: AppColors.primLightGrey),
+    );
+
+    return Expanded(
+      child: TextField(
+        controller: _searchController,
+        onChanged: (value) {
+          ref.read(searchProvider.notifier).updateSearch(value);
+          if (value.isNotEmpty) {
+            final results = ref.read(filteredFoodsProvider);
+
+            showSearchDropdown(context, results);
+          } else {
+            removeDropdown();
+          }
+        },
+        decoration: InputDecoration(
+          hintText: "Search food",
+          prefixIcon: Icon(Icons.search),
+          enabledBorder: border,
+          focusedBorder: border,
+          errorBorder: border,
+          focusedErrorBorder: border,
+          suffixIcon:
+              ref.watch(searchProvider).isNotEmpty
+                  ? IconButton(
+                    icon: const Icon(Icons.close),
+
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      removeDropdown();
+                      _searchController.clear();
+                      ref.read(searchProvider.notifier).clearSearch();
+                    },
+                  )
+                  : null,
+        ),
+      ),
+    );
+  }
+
+  void showSearchDropdown(BuildContext context, List<FoodModel> foods) {
+    removeDropdown();
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          width: MediaQuery.of(context).size.width - 32,
+          top: 120,
+          left: 16,
+          child: Material(
+            elevation: 8,
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 250),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: foods.length,
+                itemBuilder: (context, index) {
+                  final food = foods[index];
+                  return ListTile(
+                    leading: Image.network(
+                      food.imageUrl,
+                      width: 45,
+                      height: 45,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text(food.name),
+                    subtitle: Text(food.category),
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      removeDropdown();
+                      _searchController.clear();
+                      ref.read(searchProvider.notifier).clearSearch();
+                      GoRouter.of(
+                        context,
+                      ).push("/${RouterPaths.foodDetails}", extra: food);
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void removeDropdown() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
   }
 }

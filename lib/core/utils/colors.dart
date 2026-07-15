@@ -5,6 +5,7 @@ class AppColors {
   static const Color primDark = Color(0xFF121212);
   static const Color primScaffoldBG = Color(0xFFFAF7F3);
   static const Color primWhite = Color(0xFFFFFFFF);
-  static Color primLightGrey = Colors.grey.shade400;
+  static Color primLightGrey = Colors.grey.shade500;
   static Color primSecText = Colors.black45;
+  static Color primBlue = Colors.blue;
 }

@@ -1,13 +1,13 @@
 import '../../features/explore/models/food_model.dart';
 
-class CartItem {
+class CartItemModel {
   final FoodModel food;
   final int quantity;
 
-  CartItem({required this.food, this.quantity = 1});
+  CartItemModel({required this.food, this.quantity = 1});
 
-  CartItem copyWith({int? quantity}) {
-    return CartItem(food: food, quantity: quantity ?? this.quantity);
+  CartItemModel copyWith({int? quantity}) {
+    return CartItemModel(food: food, quantity: quantity ?? this.quantity);
   }
 
   double get totalPrice => food.price * quantity;

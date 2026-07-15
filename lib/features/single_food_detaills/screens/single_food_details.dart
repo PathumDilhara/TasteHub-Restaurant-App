@@ -1,27 +1,35 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tastehub/core/models/cart_item_model.dart';
+import 'package:tastehub/core/router/router_paths.dart';
 import 'package:tastehub/core/utils/colors.dart';
 import 'package:tastehub/core/utils/constants.dart';
 import 'package:tastehub/core/widgets/custom_button.dart';
 
+import '../../../core/providers/cart_provider.dart';
 import '../../explore/models/food_model.dart';
 
-class FoodDetailsScreen extends StatefulWidget {
+class FoodDetailsScreen extends ConsumerStatefulWidget {
   final FoodModel food;
 
   const FoodDetailsScreen({super.key, required this.food});
 
   @override
-  State<FoodDetailsScreen> createState() => _FoodDetailsScreenState();
+  ConsumerState<FoodDetailsScreen> createState() => _FoodDetailsScreenState();
 }
 
-class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
+class _FoodDetailsScreenState extends ConsumerState<FoodDetailsScreen> {
   final ValueNotifier<int> _quantity = ValueNotifier(1);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.food.name)),
+      appBar: AppBar(
+        title: Text(widget.food.name),
+        actions: [_buildCartIcon()],
+      ),
 
       body: Stack(
         children: [
@@ -133,14 +141,12 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                                 },
                               ),
                             ),
-
                             SizedBox(width: 15),
 
                             Text(
                               value.toString(),
                               style: TextStyle(fontSize: 20),
                             ),
-
                             SizedBox(width: 15),
 
                             CircleAvatar(
@@ -162,7 +168,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavBar()
+      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 
@@ -178,7 +184,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     );
   }
 
-  Widget _buildBottomNavBar(){
+  Widget _buildBottomNavBar() {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -189,11 +195,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Price", style: Theme.of(context).textTheme.bodyLarge,),
+                Text("Price", style: Theme.of(context).textTheme.bodyLarge),
 
                 Text(
-                    "\$${widget.food.price}",
-                    style: Theme.of(context).textTheme.headlineMedium
+                  "\$${widget.food.price}",
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ],
             ),
@@ -204,11 +210,50 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
               bgColor: AppColors.primMain.withValues(alpha: 0.3),
               titleColor: AppColors.primDark,
               width: 150,
-              onTap: () {},
+              onTap: () {
+                CartItemModel cartItem = CartItemModel(
+                  food: widget.food,
+                  quantity: _quantity.value,
+                );
+                ref.read(cartProvider.notifier).addToCart(cartItem);
+              },
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCartIcon() {
+    final totalQuantity = ref.watch(cartQuantityProvider);
+    return Stack(
+      children: [
+        SizedBox(
+          height: 60,
+          width: 60,
+          child: IconButton(
+            onPressed: () {
+              GoRouter.of(context).push("/${RouterPaths.cart}");
+            },
+            icon: Icon(Icons.shopping_cart, size: 30),
+          ),
+        ),
+
+        Positioned(
+          right: 3,
+          top: 0,
+          child: Container(
+            width: 25,
+            height: 25,
+            padding: EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: AppColors.primMain,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(child: Text(totalQuantity.toString())),
+          ),
+        ),
+      ],
     );
   }
 }
