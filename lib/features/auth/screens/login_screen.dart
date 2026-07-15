@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   void _onLogin() {
-    print("on login");
+    // print("on login");
 
     if (_formKey.currentState!.validate()) {
       String email = emailController.text;
@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       passwordController.clear();
 
       GoRouter.of(context).push("/${RouterPaths.explore}");
-      print("Email : $email , Password : $password");
+      // print("Email : $email , Password : $password");
     }
   }
 

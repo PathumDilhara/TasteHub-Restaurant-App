@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tastehub/core/utils/colors.dart';
 import 'package:tastehub/core/utils/constants.dart';
 
 Widget customButton({
@@ -25,11 +24,14 @@ Widget customButton({
           color: bgColor,
         ),
         child: Center(
-          child: Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium!.copyWith(color: AppColors.primWhite),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5.0),
+            child: Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium!.copyWith(color: titleColor),
+            ),
           ),
         ),
       ),

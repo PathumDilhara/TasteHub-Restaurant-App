@@ -1,0 +1,17 @@
+[
+  {
+    "promoId": "promo_001",
+    "promoDescription": "Get 30% OFF on your first burger order",
+    "promoImageUrl": "assets/foods/burger.webp"
+  },
+  {
+    "promoId": "promo_002",
+    "promoDescription": "Weekend Pizza Deal - Buy 1 Get 1 Free",
+    "promoImageUrl": "assets/foods/pizza.jpeg"
+  },
+  {
+    "promoId": "promo_003",
+    "promoDescription": "Fresh meals delivered hot and fast",
+    "promoImageUrl": "assets/foods/burger.webp"
+  }
+]
